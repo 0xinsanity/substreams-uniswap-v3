@@ -18,11 +18,6 @@ pub mod sinkfiles;
 #[path = "./uniswap.types.v1.rs"]
 pub mod uniswap;
 
-#[allow(unused_imports)]
-#[allow(dead_code)]
-#[path = "./sf.ethereum.tokens.v1.rs"]
-pub mod tokens;
-
 impl PositionEvent {
     pub fn get_ordinal(&self) -> u64 {
         return match self.r#type.as_ref().unwrap() {
