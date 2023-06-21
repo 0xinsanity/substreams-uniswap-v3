@@ -10,6 +10,7 @@ package:
 imports:
   entity: https://github.com/streamingfast/substreams-entity-change/releases/download/v1.1.0/substreams-entity-change-v1.1.0.spkg
   sink_files: https://github.com/streamingfast/substreams-sink-files/releases/download/v2.0.0/substreams-sink-files-v2.0.0.spkg
+  
 
 protobuf:
   files:

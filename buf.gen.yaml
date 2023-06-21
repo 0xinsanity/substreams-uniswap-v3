@@ -4,3 +4,4 @@ plugins:
   - plugin: buf.build/community/neoeinstein-prost
     out: src/pb
     opt:
+      - type_attribute=.uniswap.types.v1=#[derive(::serde::Serialize)]

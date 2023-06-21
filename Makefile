@@ -34,7 +34,7 @@ graph_out: build
 
 .PHONY: protogen
 protogen:
-	substreams protogen ./substreams.yaml --exclude-paths="google"
+	substreams protogen ./substreams.yaml --exclude-paths="sf/substreams/entity,sf/substreams/rpc,google"
 
 .PHONE: package
 package: build
