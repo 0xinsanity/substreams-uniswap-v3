@@ -67,7 +67,7 @@ substreams run https://github.com/streamingfast/substreams-uniswap-v3/releases/d
 [...]
 {
   "@module": "graph_out",
-  "@block": 12292922,
+  "@block": 17486656,
   "@type": "sf.substreams.entity.v1.EntityChanges",
   "@data": {
     "entityChanges": [

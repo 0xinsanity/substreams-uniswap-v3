@@ -9,6 +9,7 @@ package:
 
 imports:
   entity: https://github.com/streamingfast/substreams-entity-change/releases/download/v1.1.0/substreams-entity-change-v1.1.0.spkg
+  sink_files: https://github.com/streamingfast/substreams-sink-files/releases/download/v0.1.0/substreams-sink-files-v0.1.0.spkg
 
 protobuf:
   files:
@@ -24,7 +25,7 @@ binaries:
 modules:
   - name: map_pools_created
     kind: map
-    initialBlock: 12292922
+    initialBlock: 17486656
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
@@ -61,7 +62,7 @@ modules:
 
   - name: map_tokens_whitelist_pools
     kind: map
-    initialBlock: 12292922
+    initialBlock: 17486656
     inputs:
       - map: map_pools_created
     output:
@@ -76,7 +77,7 @@ modules:
 
   - name: map_extract_data_types
     kind: map
-    initialBlock: 12292922
+    initialBlock: 17486656
     inputs:
       - source: sf.ethereum.type.v2.Block
       - store: store_pools_created
@@ -85,7 +86,7 @@ modules:
 
   - name: jsonl_out
     kind: map
-    initialBlock: 12292922
+    initialBlock: 17486656
     inputs:
       - source: sf.ethereum.type.v2.Block
       - store: store_pools_created
@@ -102,7 +103,7 @@ modules:
   - name: store_prices
     kind: store
     updatePolicy: set
-    initialBlock: 12292922
+    initialBlock: 17486656
     valueType: bigdecimal
     inputs:
       - source: sf.substreams.v1.Clock
@@ -112,7 +113,7 @@ modules:
   - name: store_pool_liquidities
     kind: store
     updatePolicy: set
-    initialBlock: 12292922
+    initialBlock: 17486656
     valueType: bigint
     inputs:
       - source: sf.substreams.v1.Clock
@@ -147,7 +148,7 @@ modules:
   - name: store_eth_prices
     kind: store
     updatePolicy: set
-    initialBlock: 12292922
+    initialBlock: 17486656
     valueType: bigdecimal
     inputs:
       - source: sf.substreams.v1.Clock
@@ -160,7 +161,7 @@ modules:
 
   - name: store_token_tvl
     kind: store
-    initialBlock: 12292922
+    initialBlock: 17486656
     updatePolicy: add
     valueType: bigdecimal
     inputs:
@@ -168,7 +169,7 @@ modules:
 
   - name: store_derived_tvl
     kind: store
-    initialBlock: 12292922
+    initialBlock: 17486656
     updatePolicy: set
     valueType: bigdecimal
     inputs:
@@ -180,7 +181,7 @@ modules:
 
   - name: store_derived_factory_tvl
     kind: store
-    initialBlock: 12292922
+    initialBlock: 17486656
     updatePolicy: add
     valueType: bigdecimal
     inputs:
@@ -235,7 +236,7 @@ modules:
 
   - name: graph_out
     kind: map
-    initialBlock: 12292922
+    initialBlock: 17486656
     inputs:
       - source: sf.substreams.v1.Clock
       - store: store_pool_count
