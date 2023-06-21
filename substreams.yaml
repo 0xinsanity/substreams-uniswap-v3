@@ -9,7 +9,7 @@ package:
 
 imports:
   entity: https://github.com/streamingfast/substreams-entity-change/releases/download/v1.1.0/substreams-entity-change-v1.1.0.spkg
-  sink_files: https://github.com/streamingfast/substreams-sink-files/releases/download/v0.1.0/substreams-sink-files-v0.1.0.spkg
+  sink_files: https://github.com/streamingfast/substreams-sink-files/releases/download/v2.0.0/substreams-sink-files-v2.0.0.spkg
 
 protobuf:
   files:
@@ -91,7 +91,7 @@ modules:
       - source: sf.ethereum.type.v2.Block
       - store: store_pools_created
     output:
-      type: proto:substreams.sink.files.v1.Lines
+      type: proto:sf.substreams.sink.files.v1.Lines
 
   - name: store_pool_sqrt_price
     kind: store
