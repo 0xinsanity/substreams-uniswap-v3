@@ -9,6 +9,10 @@ use crate::{Erc20Token, Pool};
 use substreams::scalar::BigDecimal;
 use substreams::{log, Hex};
 
+#[path = "substreams.sink.files.v1.rs"]
+#[allow(dead_code)]
+pub mod sinkfiles;
+
 #[allow(unused_imports)]
 #[allow(dead_code)]
 #[path = "./uniswap.types.v1.rs"]

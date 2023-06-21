@@ -26,6 +26,7 @@ use crate::pb::uniswap::{events, Events};
 use crate::pb::uniswap::{Erc20Token, Erc20Tokens, Pool, Pools};
 use crate::price::WHITELIST_TOKENS;
 use crate::utils::{ERROR_POOL, UNISWAP_V3_FACTORY};
+use pb::sinkfiles::Lines;
 use std::ops::{Div, Mul, Sub};
 use substreams::errors::Error;
 use substreams::key::key_first_segment_in;
@@ -166,6 +167,10 @@ pub fn store_tokens_whitelist_pools(tokens: Erc20Tokens, output_append: StoreApp
 
 #[substreams::handlers::map]
 pub fn map_extract_data_types(block: Block, pools_store: StoreGetProto<Pool>) -> Result<Events, Error> {
+    _map_extract_data_types(block, pools_store)
+}
+
+pub fn _map_extract_data_types(block: Block, pools_store: StoreGetProto<Pool>) -> Result<Events, Error> {
     let mut events = Events::default();
 
     let mut pool_sqrt_prices: Vec<events::PoolSqrtPrice> = vec![];
@@ -243,6 +248,48 @@ pub fn map_extract_data_types(block: Block, pools_store: StoreGetProto<Pool>) ->
     events.ticks_updated = ticks_updated;
 
     Ok(events)
+}
+
+fn collect_transaction_strings<T>(field: &[T], transaction_strings: &mut Vec<String>)
+where
+    T: serde::Serialize,
+{
+    for element in field {
+        let transaction_string = serde_json::to_string(element).unwrap();
+        transaction_strings.push(transaction_string);
+    }
+}
+
+#[substreams::handlers::map]
+pub fn jsonl_out(block: Block, pools_store: StoreGetProto<Pool>) -> Result<Lines, substreams::errors::Error> {
+    let results = _map_extract_data_types(block, pools_store);
+    let events = match results {
+        Ok(e) => e,
+        Err(err) => panic!("{}", err.to_string()),
+    };
+
+    let mut events_json: Vec<String> = Vec::new();
+    // Collect transaction strings from each field
+    collect_transaction_strings(&events.pool_sqrt_prices, &mut events_json);
+    collect_transaction_strings(&events.pool_liquidities, &mut events_json);
+    collect_transaction_strings(&events.fee_growth_global_updates, &mut events_json);
+    collect_transaction_strings(&events.fee_growth_inside_updates, &mut events_json);
+    collect_transaction_strings(&events.fee_growth_outside_updates, &mut events_json);
+    collect_transaction_strings(&events.pool_events, &mut events_json);
+    collect_transaction_strings(&events.transactions, &mut events_json);
+    collect_transaction_strings(&events.flashes, &mut events_json);
+    collect_transaction_strings(&events.ticks_created, &mut events_json);
+    collect_transaction_strings(&events.ticks_updated, &mut events_json);
+    collect_transaction_strings(&events.created_positions, &mut events_json);
+    collect_transaction_strings(&events.increase_liquidity_positions, &mut events_json);
+    collect_transaction_strings(&events.decrease_liquidity_positions, &mut events_json);
+    collect_transaction_strings(&events.collect_positions, &mut events_json);
+    collect_transaction_strings(&events.transfer_positions, &mut events_json);
+
+    let lines: Lines = Lines {
+        lines: events_json,
+    };
+    Ok(lines)
 }
 
 #[substreams::handlers::store]
@@ -1263,7 +1310,7 @@ pub fn graph_out(
     let mut tables = Tables::new();
     let timestamp = clock.timestamp.unwrap().seconds;
 
-    if clock.number == 12369621 {
+    if clock.number == 12292922 {
         // FIXME: Hard-coded start block, how could we pull that from the manifest?
         // FIXME: ideally taken from the params of the module
         db::factory_created_factory_entity_change(&mut tables);

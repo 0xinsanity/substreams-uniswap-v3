@@ -932,6 +932,8 @@ dependencies = [
  "prost",
  "prost-build",
  "prost-types",
+ "serde",
+ "serde_json",
  "substreams",
  "substreams-entity-change",
  "substreams-ethereum",

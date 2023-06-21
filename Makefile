@@ -1,5 +1,7 @@
-ENDPOINT ?= api-unstable.streamingfast.io:443
+ENDPOINT ?= mainnet.eth.streamingfast.io:443
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 GRAPH_CONFIG ?= ../graph-node-dev/config/graphman.toml
+SINK_RANGE := "12292922:"
 
 .PHONY: build
 build:
@@ -7,11 +9,28 @@ build:
 
 .PHONY: stream
 stream: build
-	substreams run -e $(ENDPOINT) substreams.yaml map_extract_data_types -s 12369621 -t +1000
+	substreams run -e $(ENDPOINT) substreams.yaml map_extract_data_types -s 12294922 -t +1000
+
+.PHONY: jsonl_out
+jsonl_out: build
+	substreams run -e $(ENDPOINT) substreams.yaml jsonl_out -s 12292922 -t +1000
+
+.PHONY: sink_lines_to_files
+sink_lines_to_files: build
+	substreams-sink-files \
+	run \
+	$(ENDPOINT) \
+	"$(ROOT_DIR)/substreams.yaml" \
+	jsonl_out \
+	"$(ROOT_DIR)/sink-files/out" \
+	--encoder="lines" \
+	--file-working-dir="$(ROOT_DIR)/sink-files/working" \
+	--state-store="$(ROOT_DIR)/sink-files/workdir/state.yaml" \
+	$(SINK_RANGE)
 
 .PHONY: graph_out
 graph_out: build
-	substreams run -e $(ENDPOINT) substreams.yaml graph_out -s 12369621 -t +1000
+	substreams run -e $(ENDPOINT) substreams.yaml graph_out -s 12292922 -t +10000
 
 .PHONY: protogen
 protogen:
