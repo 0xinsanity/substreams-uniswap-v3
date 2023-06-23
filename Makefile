@@ -1,7 +1,7 @@
-ENDPOINT ?= mainnet.eth.streamingfast.io:443
+ENDPOINT ?= firehose-us-east-2.internal.dev.atherdigital.net:8545
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 GRAPH_CONFIG ?= ../graph-node-dev/config/graphman.toml
-SINK_RANGE := "17486656:"
+SINK_RANGE := "12369621:"
 
 .PHONY: build
 build:
@@ -9,16 +9,16 @@ build:
 
 .PHONY: stream
 stream: build
-	substreams run -e $(ENDPOINT) substreams.yaml map_extract_data_types -s 17486656 -t +1000
+	substreams run --plaintext -e $(ENDPOINT) substreams.yaml map_extract_data_types -s 12369621 -t +1000
 
 .PHONY: jsonl_out
 jsonl_out: build
-	substreams run -e $(ENDPOINT) substreams.yaml jsonl_out -s 17486656 -t +1000
+	substreams run --plaintext -e $(ENDPOINT) substreams.yaml jsonl_out -s 12369621 -t +1000
 
 .PHONY: sink_lines_to_files
 sink_lines_to_files: build
 	substreams-sink-files \
-	run \
+	run -p \
 	$(ENDPOINT) \
 	"$(ROOT_DIR)/substreams.yaml" \
 	jsonl_out \
@@ -30,7 +30,7 @@ sink_lines_to_files: build
 
 .PHONY: graph_out
 graph_out: build
-	substreams run -e $(ENDPOINT) substreams.yaml graph_out -s 17486656 -t +10000
+	substreams run --plaintext -e $(ENDPOINT) substreams.yaml graph_out -s 12369621 -t +10000
 
 .PHONY: protogen
 protogen:

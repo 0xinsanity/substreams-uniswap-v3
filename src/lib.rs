@@ -1310,7 +1310,7 @@ pub fn graph_out(
     let mut tables = Tables::new();
     let timestamp = clock.timestamp.unwrap().seconds;
 
-    if clock.number == 17486656 {
+    if clock.number == 12369621 {
         // FIXME: Hard-coded start block, how could we pull that from the manifest?
         // FIXME: ideally taken from the params of the module
         db::factory_created_factory_entity_change(&mut tables);
